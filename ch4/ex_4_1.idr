@@ -46,4 +46,43 @@ maxMaybe l@(Just x) r@(Just y) =
     EQ => r
     GT => l
 
+||| Exercise 4.1.6
+
+||| Represents shapes
+data Shape = ||| A triangle, with is base length and height
+             Triangle Double Double
+           | |||A rectangle, with its length and height
+             Rectangle Double Double
+           | ||| A circle, with its radius
+             Circle Double
+
+data Picture = Primitive Shape
+             | Combine Picture Picture
+             | Rotate Double Picture
+             | Translate Double Double Picture
+
+area : Shape -> Double
+area (Triangle base height) = 0.5 * base * height
+area (Rectangle length height) = length * height
+area (Circle radius) = pi * radius * radius
+
+areaIfTriangle : Shape -> Maybe Double
+areaIfTriangle tri@(Triangle x y) = Just (area tri)
+areaIfTriangle (Rectangle x y) = Nothing
+areaIfTriangle (Circle x) = Nothing
+
+biggestTriangle : Picture -> Maybe Double
+biggestTriangle (Primitive shape) = areaIfTriangle shape
+biggestTriangle (Combine x y) = maxMaybe (biggestTriangle x) (biggestTriangle y)
+biggestTriangle (Rotate x pic) = biggestTriangle pic
+biggestTriangle (Translate x y pic) = biggestTriangle pic
+
+testPic1 : Picture
+testPic1 = Combine (Primitive (Triangle 2 3))
+                   (Primitive (Triangle 2 4))
+
+testPic2 : Picture
+testPic2 = Combine (Primitive (Rectangle 1 3))
+                   (Primitive (Circle 4))
+
 

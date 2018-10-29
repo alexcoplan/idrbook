@@ -34,3 +34,15 @@ sumAt {n} pos xs ys =
        Nothing => Nothing
        (Just idx) => Just ((index idx xs) + (index idx ys))
 
+
+vzip : Vect n a -> Vect n b -> Vect n (a,b)
+vzip [] [] = []
+vzip (x :: xs) (y :: ys) = (x, y) :: vzip xs ys
+
+sumEntries : Num a => (pos : Integer) -> Vect n a -> Vect n a -> Maybe a
+sumEntries {n} pos xs ys =
+  case integerToFin pos n of
+       Nothing => Nothing
+       (Just iFin) => Just ((Vect.index iFin xs) + (Vect.index iFin ys))
+
+
