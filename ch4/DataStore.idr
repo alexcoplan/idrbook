@@ -28,7 +28,7 @@ data Command = Add String
 
 total parseCommand : (cmd : String) -> (args : String) -> Maybe Command
 parseCommand "add" str = Just (Add str)
-parseCommand "get" val = case all isDigit (unpack val) of
+parseCommand "get" val = case (length val) > 0 && (all isDigit (unpack val)) of
                               False => Nothing
                               True => Just (Get (cast val))
 parseCommand "search" s = Just (Search s)
